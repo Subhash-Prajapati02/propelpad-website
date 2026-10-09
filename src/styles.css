@@ -190,3 +190,9 @@
 }
 @media (max-width: 360px) { .nav-cta { display: none; }.mobile-menu-button { margin-left: auto; }.hero h1 { font-size: 40px; }.hero-actions .brand-button,.hero-actions .glass-button { padding: 0 11px; font-size: 9px; }.section h2 { font-size: 28px; }.contact-heading h2 { font-size: 39px; }.contact-arrow svg { width: 28px; }.contacts { grid-template-columns: 1fr; }.hero { min-height: 650px; max-height: none; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *,*::before,*::after { animation: none !important; transition-duration: 0s !important; }.motion-ready [data-reveal] { opacity: 1; transform: none; }.store-story { height: auto; }.story-sticky { position: relative; top: 0; height: 650px; }.hero-image { transform: none; } }
+
+.story-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.story-controls { display: flex; align-items: center; gap: 20px; }
+.video-control { min-height: 34px; height: 34px; width: 34px; padding: 0; color: var(--primary-foreground); background: var(--glass-dark); border-color: color-mix(in oklab,var(--glass-border) 40%,transparent); }
+.video-control:hover { color: var(--foreground); }
+@media (prefers-reduced-motion: reduce) { .story-video, .video-control { display: none; } }

@@ -5,6 +5,7 @@ import { contacts, composeInquiry, locations, expansion, intelligence, buying } 
 import store20 from '@/assets/stores/store-20.webp.asset.json';
 import store21 from '@/assets/stores/store-21.webp.asset.json';
 import store22 from '@/assets/stores/store-22.webp.asset.json';
+import storeVideo from '@/assets/videos/propelpad-pinned-loop.mp4.asset.json';
 
 export function Brand({ footer = false }: { footer?: boolean }) {
  return <a href="#top" className={`wordmark ${footer ? 'footer-wordmark' : ''}`} aria-label="Propelpad home">propelpad<span className="wordmark-symbol" aria-hidden="true">↗</span></a>;
@@ -35,17 +36,26 @@ export function StoreStory() {
  const [scene, setScene] = useState(0);
  const [playing, setPlaying] = useState(true);
  const video = useRef<HTMLVideoElement>(null);
+ const [videoVisible, setVideoVisible] = useState(false);
+ useEffect(() => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const node = ref.current; if (!node) return;
+  const observer = new IntersectionObserver(([entry]) => {
+   if (!entry) return; setVideoVisible(entry.isIntersecting);
+  }, { rootMargin: '150px' });
+  observer.observe(node); return () => observer.disconnect();
+ }, []);
  useEffect(() => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setPlaying(false); return; }
   let pending = false;
-  const update = () => { pending = false; const rect = ref.current?.getBoundingClientRect(); if (!rect) return; const progress = -rect.top / Math.max(1, rect.height - window.innerHeight); setScene(Math.max(0, Math.min(2, Math.floor(progress * 3)))); };
+  const update = () => { pending = false; const rect = ref.current?.getBoundingClientRect(); if (!rect) return; const progress = -rect.top / Math.max(1, rect.height - window.innerHeight); setScene(Math.max(0, Math.min(2, Math.floor(progress * 3)))); const clip = video.current; if (clip && Number.isFinite(clip.duration) && progress >= 0 && progress <= 1 && !clip.seeking) clip.currentTime = Math.min(clip.duration - .05, Math.max(0, progress) * clip.duration); };
   const scroll = () => { if (!pending) { pending = true; requestAnimationFrame(update); } };
   window.addEventListener('scroll', scroll, { passive: true }); update();
   return () => window.removeEventListener('scroll', scroll);
  }, []);
- useEffect(() => { if (!video.current) return; if (playing) video.current.play().catch(() => {}); else video.current.pause(); }, [playing]);
+ useEffect(() => { if (!video.current) return; if (playing && videoVisible) video.current.play().catch(() => {}); else video.current.pause(); }, [playing, videoVisible]);
  const current = scenes[scene] ?? scenes[0]; const Icon = current.icon;
- return <section className="store-story" id="inside" ref={ref}><div className="story-sticky"><div className="story-visual">{scenes.map((s, i) => <img key={s.number} src={s.image} alt={`Inside a Propelpad white store — ${s.label.toLowerCase()}`} loading="lazy" width="1200" height="900" className={i === scene ? 'story-image active' : 'story-image'}/>)}{/* Store video is added after production, preserving authentic photo fallback. */}<div className="story-shade"/></div><div className="story-top"><span className="eyebrow"><span className="status-dot"/> INSIDE OUR WHITE STORES</span><span className="story-count">{current.number} / 03</span></div><div className="story-content"><span className="story-kicker"><Icon size={18}/>{current.label}</span><h2>{current.title}</h2><p>{current.detail}</p><div className="story-steps" aria-label="Store standards">{scenes.map((s, i) => <Button variant="glass" key={s.number} aria-label={`View ${s.label.toLowerCase()}`} aria-pressed={scene === i} className={scene === i ? 'story-step active' : 'story-step'} onClick={() => { setScene(i); const node = ref.current; if (node && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) window.scrollTo({ top: window.scrollY + node.getBoundingClientRect().top + (node.offsetHeight - window.innerHeight) * (i / 3 + .06), behavior: 'smooth' }); }}>{s.number}</Button>)}</div></div><div className="story-footer"><span><ShieldCheck size={15}/> FSSAI-compliant</span><span><Snowflake size={15}/> Temperature-controlled</span><span><ScanLine size={15}/> Real-time quality checks</span><span>CCTV-monitored</span></div></div></section>;
+ return <section className="store-story" id="inside" ref={ref}><div className="story-sticky"><div className="story-visual">{scenes.map((s, i) => <img key={s.number} src={s.image} alt={`Inside a Propelpad white store — ${s.label.toLowerCase()}`} loading="lazy" width="1200" height="900" className={i === scene ? 'story-image active' : 'story-image'}/>)}<video ref={video} src={videoVisible ? storeVideo.url : undefined} className="story-video" poster={store21.url} autoPlay={playing && videoVisible} muted loop playsInline preload="none" aria-label="Cinematic sequence of Propelpad’s original store photographs"/><div className="story-shade"/></div><div className="story-top"><span className="eyebrow"><span className="status-dot"/> INSIDE OUR WHITE STORES</span><div className="story-controls"><span className="story-count">{current.number} / 03</span><Button variant="glass" size="icon" className="video-control" onClick={() => setPlaying(!playing)} aria-label={playing ? 'Pause video' : 'Play video'} title={playing ? 'Pause video' : 'Play video'}>{playing ? <Pause/> : <Play/>}</Button></div></div><div className="story-content"><span className="story-kicker"><Icon size={18}/>{current.label}</span><h2>{current.title}</h2><p>{current.detail}</p><div className="story-steps" aria-label="Store standards">{scenes.map((s, i) => <Button variant="glass" key={s.number} aria-label={`View ${s.label.toLowerCase()}`} aria-pressed={scene === i} className={scene === i ? 'story-step active' : 'story-step'} onClick={() => { setScene(i); const node = ref.current; if (node && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) window.scrollTo({ top: window.scrollY + node.getBoundingClientRect().top + (node.offsetHeight - window.innerHeight) * (i / 3 + .06), behavior: 'smooth' }); }}>{s.number}</Button>)}</div></div><div className="story-footer"><span><ShieldCheck size={15}/> FSSAI-compliant</span><span><Snowflake size={15}/> Temperature-controlled</span><span><ScanLine size={15}/> Real-time quality checks</span><span>CCTV-monitored</span></div></div></section>;
 }
 export function Intelligence() {
  const [active, setActive] = useState(0);
