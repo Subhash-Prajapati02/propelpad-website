@@ -41,6 +41,7 @@ export function StoreStory() {
  const [videoSource, setVideoSource] = useState(storeVideo.url);
  useEffect(() => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+   if (video.current && !video.current.canPlayType('video/mp4; codecs="avc1.640028"')) setVideoSource(storeVideoWebm.url);
   const node = ref.current; if (!node) return;
   const observer = new IntersectionObserver(([entry]) => {
    if (!entry) return; setVideoVisible(entry.isIntersecting);
