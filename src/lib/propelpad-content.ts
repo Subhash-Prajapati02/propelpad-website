@@ -33,7 +33,7 @@ export const metrics = [
   { value: "95", suffix: "%", label: "Order accuracy", detail: "Prepared accurately. Ready on time." },
   { value: "99.8", suffix: "%", label: "Store uptime", detail: "Open when your customers are ordering" },
   { value: "1:38", suffix: "", label: "Average prep time", detail: "From order received to ready to go" },
-];
+] as const;
 export const locations = ["Dahisar", "Vakola", "Santacruz", "Chembur", "Oshiwara", "Hiranandani Estate", "Khopat (Thane West)", "Fort", "Versova"];
 export const expansion = [
   { city: "Bangalore", stores: 6, quarter: "Q2" },
@@ -45,13 +45,13 @@ export const expansion = [
 export const contacts = [
   { name: "Shanu Singh", role: "Mumbai City Lead", email: "shanu.singh@propelpad.in", phone: "+91 8237981485", tel: "+918237981485" },
   { name: "Gyan Menon", role: "Co-Founder", email: "gm@propelpad.in", phone: "+91 8424048334", tel: "+918424048334" },
-];
+] as const;
 export const intelligence = [
   { title: "SKU performance insights", description: "Know which flavours and SKUs sell fastest, tracked per outlet and time of day.", tag: "PERFORMANCE", icon: "chart" },
   { title: "Low-velocity SKU alerts", description: "Spot slow-moving products before they approach expiry. Less waste. Smarter stock.", tag: "EARLY SIGNALS", icon: "alert" },
   { title: "Demand window mapping", description: "Weekends, evenings and seasonal peaks. Know exactly when to push each SKU.", tag: "DEMAND", icon: "clock" },
   { title: "Sell-through matching", description: "Match reorder cycles to real sales velocity, so stockouts don’t cost you a sale.", tag: "REPLENISHMENT", icon: "box" },
-];
+] as const;
 export const buying = [
  { title: "Zero over-buying", detail: "Buying matched to actual sell-through, so every rupee works harder." },
  { title: "Weekly velocity cadence", detail: "Buying frequency tuned to your exact sales rhythm, SKU by SKU." },

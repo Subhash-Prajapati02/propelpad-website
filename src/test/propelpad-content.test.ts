@@ -10,5 +10,5 @@ describe('Presentation facts', () => {
  it('preserves 19 new stores across five cities', () => { expect(expansion.reduce((total, city) => total + city.stores, 0)).toBe(19); expect(expansion).toHaveLength(5); });
  it('uses the 13 supplied brand partners', () => expect(brands).toHaveLength(13));
  it('uses verified contact details', () => expect(contacts.map(c => [c.email,c.tel])).toEqual([['shanu.singh@propelpad.in','+918237981485'],['gm@propelpad.in','+918424048334']]));
- it('composes an inquiry to Shanu and safely encodes user data', () => { const uri = composeInquiry('A & B','Brand #1','a@example.com','Hello? & more'); expect(uri.startsWith('mailto:shanu.singh@propelpad.in?')).toBe(true); expect(decodeURIComponent(uri.split('&body=')[1])).toContain('Brand: Brand #1'); expect(uri).toContain('Hello%3F%20%26%20more'); });
+ it('composes an inquiry to Shanu and safely encodes user data', () => { const uri = composeInquiry('A & B','Brand #1','a@example.com','Hello? & more'); expect(uri.startsWith('mailto:shanu.singh@propelpad.in?')).toBe(true); expect(decodeURIComponent(uri.split('&body=')[1] ?? '')).toContain('Brand: Brand #1'); expect(uri).toContain('Hello%3F%20%26%20more'); });
 });
