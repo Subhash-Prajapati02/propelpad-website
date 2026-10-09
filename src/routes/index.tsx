@@ -1,24 +1,26 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router';
+import { ArrowDown, ArrowUpRight, ArrowRight, ShieldCheck, Snowflake, PackageCheck, MapPin, X, Check, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Brand, Navigation, Motion, StoreStory, Intelligence, Network, Contact } from '@/components/propelpad/experience';
+import { brands, metrics } from '@/lib/propelpad-content';
+import hero from '@/assets/gelato-editorial.jpg';
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
-export const Route = createFileRoute("/")({
-  component: Index,
+export const Route = createFileRoute('/')({
+ head: () => ({ meta: [
+  { title: 'Propelpad — White Stores. Fresh Possibilities.' },
+  { name: 'description', content: 'Propelpad’s white store network powers hygienic, fast and reliable fulfilment for frozen and specialty food brands on Zomato and Swiggy across Mumbai and Thane.' },
+  { property: 'og:title', content: 'Propelpad — White Stores. Fresh Possibilities.' },
+  { property: 'og:description', content: '9 white stores. 13+ partner brands. Premium food-commerce fulfilment, built around freshness.' },
+  { property: 'og:type', content: 'website' },
+  { name: 'twitter:card', content: 'summary_large_image' },
+ ] }),
+ component: Index,
 });
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+const standards = [
+ { icon: ShieldCheck, title: 'A higher standard of clean.', description: 'FSSAI-compliant, CCTV-monitored facilities. Bright, spotless environments that match your brand’s standards.' },
+ { icon: Snowflake, title: 'Freshness, protected.', description: 'Temperature-controlled, category-specific storage. Carefully handled from the freezer to the doorstep.' },
+ { icon: PackageCheck, title: 'Built for the next order.', description: 'Fast, accurate fulfilment on Zomato and Swiggy. Real-time checks before every order leaves the store.' },
+];
 function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+ return <><a className="skip-link" href="#main">Skip to content</a><div id="top"/><Navigation/><main id="main"><section className="hero"><img src={hero} className="hero-image" alt="Vanilla and raspberry gelato, editorial food imagery" width={1920} height={1088} fetchPriority="high"/><div className="hero-overlay"/><div className="hero-inner"><span className="eyebrow"><span className="status-dot"/> THE WHITE STORE NETWORK</span><h1>White stores.<br/>Fresh products.<br/><span>Endless possibilities.</span></h1><p className="hero-copy">Your brand deserves better than a dark store.<br/>Premium fulfilment for frozen and specialty food brands.<br/>Fresh, fast, and ready for every doorstep.</p><div className="hero-actions"><Button variant="brand" asChild><a href="#contact">Grow with Propelpad <ArrowUpRight/></a></Button><Button variant="glass" asChild><a href="#inside">Inside our white stores <ArrowRight/></a></Button></div><div className="hero-bottom"><span className="hero-location"><MapPin size={16}/><span>9 WHITE STORES<br/>MUMBAI & THANE</span></span><a className="hero-scroll" href="#difference">FRESH PERSPECTIVES BELOW <ArrowDown size={16}/></a></div></div><div className="hero-floating" aria-label="Average preparation time one minute and thirty-eight seconds"><span className="floating-top"><span className="status-dot"/> FRESHNESS IN MOTION</span><strong>1:38<span className="text-primary">↗</span></strong><small>Average order prep time</small></div></section><section className="proof-bar" aria-label="Trusted brand partners"><p className="proof-label">Different flavours. One network.<strong>Trusted by 13+ leading food brands.</strong></p><div className="logo-track-wrap"><div className="logo-track">{[...brands,...brands].map((brand,i) => <img key={`${brand.name}-${i}`} src={brand.image} alt={i < brands.length ? brand.name : ''} aria-hidden={i >= brands.length} width="120" height="60" loading="lazy"/>)}</div></div></section><section className="section difference-section" id="difference"><div className="difference-intro" data-reveal><div><span className="eyebrow">01 / THE WHITE STORE DIFFERENCE</span><h2>Not dark stores.<br/>Not forgotten warehouses.<br/><span className="text-primary">A brighter way to grow.</span></h2></div><p>A premium product deserves a premium environment. Our white stores bring together <strong>hygienic storage, reliable fulfilment and intelligent inventory</strong> — so your brand shows up at its best, every single time.</p></div><div className="standards-grid">{standards.map((standard,i) => <article className="standard" data-reveal key={standard.title}><span className="standard-number">0{i+1} /</span><div className="standard-icon"><standard.icon size={25} strokeWidth={1.4}/></div><h3>{standard.title}</h3><p>{standard.description}</p></article>)}</div><div className="comparison" data-reveal><div><span className="comparison-icon"><X size={14}/></span><div><h4>Dark stores: built around square footage.</h4><p>Generic handling. Reactive restocking. Opaque operations.</p></div></div><div className="positive"><span className="comparison-icon"><Check size={14}/></span><div><h4>White stores: built around your brand.</h4><p>Category-specific care. Predictive buying. Full data transparency.</p></div></div></div></section><section className="metrics-section"><div className="metrics-inner" data-reveal><span className="eyebrow metrics-eyebrow">02 / EXCELLENCE, MEASURED DAILY</span><div className="metrics-grid">{metrics.map(metric => <div className="metric" key={metric.label}><strong className="metric-value">{metric.value}<span>{metric.suffix}</span></strong><h3>{metric.label}</h3><p>{metric.detail}</p></div>)}</div></div></section><StoreStory/><Intelligence/><section className="section brands-section" id="brands"><div className="brands-inner"><div className="section-heading" data-reveal><div><span className="eyebrow">OUR BRAND FAMILY</span><h2>Great brands.<br/>Even better company.</h2></div><p>From heritage dairy to guilt-free indulgence.<br/>13+ food brands. One trusted white store network.</p></div><div className="brands-grid" data-reveal>{brands.map(brand => <div className="brand-tile" key={brand.name}><img src={brand.image} alt={brand.name} width="260" height="175" loading="lazy"/></div>)}<a className="brand-tile join-tile" href="#contact"><Plus size={25} strokeWidth={1.3}/><span>Your brand, next? <ArrowUpRight size={13} className="inline"/></span></a></div></div></section><Network/><Contact/></main><footer className="footer"><Brand footer/><p>© {new Date().getFullYear()} Propelpad. Fresh products, every single time.<br/>Mumbai & Thane · White Store Network</p><a href="#top">BACK TO TOP <ArrowUpRight size={14}/></a></footer><Motion/></>;
 }
