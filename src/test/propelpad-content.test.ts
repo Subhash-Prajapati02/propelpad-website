@@ -6,9 +6,18 @@ describe('Presentation facts', () => {
  it('preserves 99.8% store uptime', () => expect(metrics[2].value + metrics[2].suffix).toBe('99.8%'));
  it('preserves the 1:38 preparation time', () => expect(metrics[3].value).toBe('1:38'));
  it('lists exactly nine operational stores', () => expect(locations).toEqual(['Dahisar','Vakola','Santacruz','Chembur','Oshiwara','Hiranandani Estate','Khopat (Thane West)','Fort','Versova']));
- it('preserves planned expansion counts and quarters', () => expect(expansion).toEqual([{city:'Bangalore',stores:6,quarter:'Q2'},{city:'Delhi NCR',stores:5,quarter:'Q2'},{city:'Hyderabad',stores:3,quarter:'Q3'},{city:'Kolkata',stores:3,quarter:'Q3'},{city:'Pune',stores:2,quarter:'Q3'}]));
+ it('preserves planned expansion counts and quarters', () => expect(expansion).toEqual([{city:'Bengaluru',stores:6,quarter:'Q2'},{city:'Delhi NCR',stores:5,quarter:'Q2'},{city:'Hyderabad',stores:3,quarter:'Q3'},{city:'Kolkata',stores:3,quarter:'Q3'},{city:'Pune',stores:2,quarter:'Q3'}]));
  it('preserves 19 new stores across five cities', () => { expect(expansion.reduce((total, city) => total + city.stores, 0)).toBe(19); expect(expansion).toHaveLength(5); });
  it('uses the 13 supplied brand partners', () => expect(brands).toHaveLength(13));
  it('uses verified contact details', () => expect(contacts.map(c => [c.email,c.tel])).toEqual([['shanu.singh@propelpad.in','+918237981485'],['gm@propelpad.in','+918424048334']]));
  it('composes an inquiry to Shanu and safely encodes user data', () => { const uri = composeInquiry('A & B','Brand #1','a@example.com','Hello? & more'); expect(uri.startsWith('mailto:shanu.singh@propelpad.in?')).toBe(true); expect(decodeURIComponent(uri.split('&body=')[1] ?? '')).toContain('Brand: Brand #1'); expect(uri).toContain('Hello%3F%20%26%20more'); });
+});
+import { networkStores, filterStores, distanceKm, mapsLink } from '../lib/propelpad-content';
+describe('Store locator', () => {
+ it('maps nine operational and five planned locations', () => { expect(networkStores.filter(s => s.status === 'operational')).toHaveLength(9); expect(networkStores.filter(s => s.status === 'planned').map(s => s.city)).toEqual(['Bengaluru','Delhi NCR','Hyderabad','Kolkata','Pune']); });
+ it('never ships an unverified street address', () => expect(networkStores.every(s => s.address === null)).toBe(true));
+ it('filters by city and status', () => { expect(filterStores(networkStores, 'thane', 'all').map(s => s.id)).toEqual(['hiranandani-estate','khopat']); expect(filterStores(networkStores, '', 'planned')).toHaveLength(5); });
+ it('filters by state', () => expect(filterStores(networkStores, 'karnataka', 'all').map(s => s.id)).toEqual(['bengaluru']));
+ it('computes distance between Mumbai Fort and Pune within 10km of 120km', () => { const fort = networkStores.find(s => s.id === 'fort')!, pune = networkStores.find(s => s.id === 'pune')!; expect(Math.abs(distanceKm(fort, pune) - 120)).toBeLessThan(10); });
+ it('builds a Google Maps area link', () => expect(mapsLink(networkStores[0]!)).toBe('https://www.google.com/maps/search/?api=1&query=Dahisar%2C%20Mumbai%2C%20Maharashtra'));
 });
